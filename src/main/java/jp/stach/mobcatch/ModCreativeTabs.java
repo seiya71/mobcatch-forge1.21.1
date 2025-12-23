@@ -16,11 +16,9 @@ public final class ModCreativeTabs {
     public static final RegistryObject<CreativeModeTab> MOBCATCH_TAB =
             TABS.register("mobcatch", () -> CreativeModeTab.builder()
                     .title(Component.translatable("itemGroup.mobcatch")) // langで表示名を付ける
-                    .icon(() -> ModItems.MOB_CAPTURE_ZOMBIE.get().getDefaultInstance())
+                    .icon(() -> ModItems.CAPTURE_ITEMS.values().iterator().next().get().getDefaultInstance())
                     .displayItems((params, output) -> {
-                        output.accept(ModItems.MOB_CAPTURE_ZOMBIE.get());
-                        output.accept(ModItems.MOB_CAPTURE_COW.get());
-                        output.accept(ModItems.MOB_CAPTURE_VILLAGER.get());
+                        ModItems.CAPTURE_ITEMS.values().forEach(ro -> output.accept(ro.get()));
                     })
                     .build());
 }
