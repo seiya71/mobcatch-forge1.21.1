@@ -1,12 +1,12 @@
-package com.example.examplemod;
+package jp.stach.mobcatch;
 
 import net.minecraftforge.fml.common.Mod;
 
-@Mod(ExampleMod.MODID)
-public class ExampleMod {
+@Mod(MobCatch.MODID)
+public class MobCatch {
     public static final String MODID = "mobcatch";
 
-    public ExampleMod() {
+    public MobCatch() {
         // 何もしない（起動確認用）
     }
 }
