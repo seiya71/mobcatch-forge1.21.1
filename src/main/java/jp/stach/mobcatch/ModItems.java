@@ -11,7 +11,14 @@ public final class ModItems {
     public static final DeferredRegister<Item> ITEMS =
             DeferredRegister.create(ForgeRegistries.ITEMS, MobCatch.MODID);
 
-    // Phase A: ダミーの1個だけ登録（後でモブ数ぶん増やす）
-    public static final RegistryObject<Item> MOB_CAPTURE =
-            ITEMS.register("mob_capture", () -> new Item(new Item.Properties()));
+    // B-2: まずは“同じ挙動の別ID”を複数作る
+    public static final RegistryObject<Item> MOB_CAPTURE_ZOMBIE =
+            ITEMS.register("mob_capture_zombie", () -> new Item(new Item.Properties()));
+
+    public static final RegistryObject<Item> MOB_CAPTURE_COW =
+            ITEMS.register("mob_capture_cow", () -> new Item(new Item.Properties()));
+
+    public static final RegistryObject<Item> MOB_CAPTURE_VILLAGER =
+            ITEMS.register("mob_capture_villager", () -> new Item(new Item.Properties()));
 }
+
