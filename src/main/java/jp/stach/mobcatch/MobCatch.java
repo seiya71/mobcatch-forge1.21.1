@@ -8,12 +8,16 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 public class MobCatch {
     public static final String MODID = "mobcatch";
 
-    // Forge 1.21.1 MDKのテンプレ形式に寄せる（get()系の差分を避ける）
+    // ★ Forge が呼び出すコンストラクタ
     public MobCatch(FMLJavaModLoadingContext context) {
         IEventBus modEventBus = context.getModEventBus();
 
-        // DeferredRegister を MODイベントバスへ登録
-        ModItems.ITEMS.register(modEventBus);
-        ModCreativeTabs.TABS.register(modEventBus);
+        // 全モブ分の捕獲アイテムを登録予約
+        ModItems.bootstrapCaptureItems();
+
+        // 通常の DeferredRegister 登録
+        ModItems.register(modEventBus);
+        ModCreativeTabs.register(modEventBus);
     }
 }
+
