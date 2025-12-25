@@ -3,7 +3,9 @@ package jp.stach.mobcatch;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -17,38 +19,39 @@ public final class ModItems {
     public static final DeferredRegister<Item> ITEMS =
             DeferredRegister.create(ForgeRegistries.ITEMS, MobCatch.MODID);
 
-    /**
-     * EntityType -> 捕獲アイテム
-     * C以降（捕獲/復元処理）で引くための辞書
-     */
-    public static final Map<EntityType<?>, RegistryObject<Item>> CAPTURE_ITEMS = new LinkedHashMap<>();
+    // EntityType -> そのモブ用アイテム
+    public static final Map<EntityType<?>, RegistryObject<Item>> CAPTURED_ITEMS = new LinkedHashMap<>();
 
     /**
-     * 【重要】MobCatch のコンストラクタで ITEMS.register(bus) より前に呼ぶこと
-     * ここで “登録予約” を大量に作る。
+     * MobCatch のコンストラクタから一度だけ呼ぶ。
+     * 全バニラ LivingEntity（プレイヤー以外）分のアイテムを登録予約する。
      */
     public static void bootstrapCaptureItems() {
-        if (!CAPTURE_ITEMS.isEmpty()) return;
+        if (!CAPTURED_ITEMS.isEmpty()) return;
 
-        // まずは様子見：上限を付ける（動いたら Integer.MAX_VALUE にしてOK）
-        int limit = 30;
-        int count = 0;
+        // 1.21 では keySet() は ResourceLocation の集合
+        for (ResourceLocation entityId : BuiltInRegistries.ENTITY_TYPE.keySet()) {
+            // バニラのみ
+            if (!"minecraft".equals(entityId.getNamespace())) continue;
 
-        for (ResourceLocation id : BuiltInRegistries.ENTITY_TYPE.keySet()) {
-            if (!"minecraft".equals(id.getNamespace())) continue;
-
-            EntityType<?> type = BuiltInRegistries.ENTITY_TYPE.get(id);
+            EntityType<?> type = BuiltInRegistries.ENTITY_TYPE.get(entityId);
             if (type == null) continue;
-            if (type == EntityType.PLAYER) continue; // プレイヤー除外
 
-            String itemId = "captured_" + id.getNamespace() + "_" + id.getPath();
+            // プレイヤー除外
+            if (type == EntityType.PLAYER) continue;
 
-            RegistryObject<Item> reg = ITEMS.register(itemId, () -> new Item(new Item.Properties()));
-            CAPTURE_ITEMS.put(type, reg);
+            String itemId = "captured_" + entityId.getNamespace() + "_" + entityId.getPath();
 
-            count++;
-            if (count >= limit) break;
+            RegistryObject<Item> reg = ITEMS.register(
+                    itemId,
+                    () -> new CapturedMobItem(new Item.Properties(), entityId)
+            );
+
+            CAPTURED_ITEMS.put(type, reg);
         }
     }
-}
 
+    public static void register(IEventBus modEventBus) {
+        ITEMS.register(modEventBus);
+    }
+}

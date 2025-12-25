@@ -1,6 +1,3 @@
 {
-  "itemGroup.mobcatch": "モブキャッチ",
-  "item.mobcatch.mob_capture_zombie": "モブ捕獲（ゾンビ）",
-  "item.mobcatch.mob_capture_cow": "モブ捕獲（ウシ）",
-  "item.mobcatch.mob_capture_villager": "モブ捕獲（村人）"
+  "itemGroup.mobcatch.mobcatch": "モブキャッチ"
 }
