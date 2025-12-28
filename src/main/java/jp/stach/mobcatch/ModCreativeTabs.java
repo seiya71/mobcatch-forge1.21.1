@@ -14,7 +14,7 @@ public final class ModCreativeTabs {
     private ModCreativeTabs() {}
 
     public static final DeferredRegister<CreativeModeTab> TABS =
-            DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MobCatch.MODID);
+            DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MobCatch.MOD_ID);
 
     public static final RegistryObject<CreativeModeTab> MOB_CATCH_TAB =
             TABS.register("mobcatch", () -> CreativeModeTab.builder()
@@ -32,9 +32,8 @@ public final class ModCreativeTabs {
                         return new ItemStack(Items.STICK);
                     })
                     .displayItems((params, output) -> {
-                        // 全捕獲アイテムをタブに追加
                         ModItems.CAPTURED_ITEMS.values()
-                                .forEach(reg -> output.accept(reg.get()));
+                            .forEach(reg -> output.accept(reg.get()));
                     })
                     .build()
             );

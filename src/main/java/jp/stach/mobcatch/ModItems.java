@@ -18,7 +18,7 @@ public final class ModItems {
 
     // この DeferredRegister 自体は「mobcatch」名前空間
     public static final DeferredRegister<Item> ITEMS =
-            DeferredRegister.create(ForgeRegistries.ITEMS, MobCatch.MODID);
+            DeferredRegister.create(ForgeRegistries.ITEMS, MobCatch.MOD_ID);
 
     /**
      * EntityType -> そのモブ用の捕獲アイテム
@@ -36,8 +36,12 @@ public final class ModItems {
     public static void bootstrapCapturedItems() {
         if (!CAPTURED_ITEMS.isEmpty()) return; // 二重実行防止
 
+        int total = 0;
+        int added = 0;
+
         for (ResourceLocation id : BuiltInRegistries.ENTITY_TYPE.keySet()) {
-            // まず EntityType を引く
+            total++;
+
             EntityType<?> type = BuiltInRegistries.ENTITY_TYPE.get(id);
             if (type == null) continue;
 
@@ -51,18 +55,15 @@ public final class ModItems {
             MobCategory cat = type.getCategory();
             if (cat == MobCategory.MISC) continue;
 
-            // ここまで通ったものだけ捕獲アイテム生成
             String itemId = "captured_" + id.getNamespace() + "_" + id.getPath();
 
             RegistryObject<Item> reg = ITEMS.register(
                     itemId,
-                    () -> new CapturedMobItem(
-                            new Item.Properties(),
-                            id          // CapturedMobItem には「どの EntityType か」の ID を渡す
-                    )
+                    () -> new CapturedMobItem(new Item.Properties(), id)
             );
 
             CAPTURED_ITEMS.put(type, reg);
+            added++;
         }
     }
 }
