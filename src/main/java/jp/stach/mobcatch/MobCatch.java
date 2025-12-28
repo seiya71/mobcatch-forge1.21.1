@@ -8,15 +8,17 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 public class MobCatch {
     public static final String MODID = "mobcatch";
 
-    // ★ Forge が呼び出すコンストラクタ
-    public MobCatch(FMLJavaModLoadingContext context) {
-        IEventBus modEventBus = context.getModEventBus();
+    public MobCatch() {
+        // Forge 1.21.1 の標準パターン：0 引数コンストラクタ ＋ get()
+        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        // 全モブ分の捕獲アイテムを登録予約
-        ModItems.bootstrapCaptureItems();
-
-        // 通常の DeferredRegister 登録
+        // ① DeferredRegister<Item> を EventBus に登録
         ModItems.register(modEventBus);
+
+        // ② LivingEntity 系モブだけの捕獲アイテムを全部予約登録
+        ModItems.bootstrapCapturedItems();
+
+        // ③ クリエタブ登録（中身は CAPTURED_ITEMS を参照）
         ModCreativeTabs.register(modEventBus);
     }
 }

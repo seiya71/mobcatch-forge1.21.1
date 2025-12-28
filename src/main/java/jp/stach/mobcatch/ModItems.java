@@ -3,7 +3,7 @@ package jp.stach.mobcatch;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -16,42 +16,53 @@ import java.util.Map;
 public final class ModItems {
     private ModItems() {}
 
+    // この DeferredRegister 自体は「mobcatch」名前空間
     public static final DeferredRegister<Item> ITEMS =
             DeferredRegister.create(ForgeRegistries.ITEMS, MobCatch.MODID);
 
-    // EntityType -> そのモブ用アイテム
+    /**
+     * EntityType -> そのモブ用の捕獲アイテム
+     */
     public static final Map<EntityType<?>, RegistryObject<Item>> CAPTURED_ITEMS = new LinkedHashMap<>();
 
+    public static void register(IEventBus bus) {
+        ITEMS.register(bus);
+    }
+
     /**
-     * MobCatch のコンストラクタから一度だけ呼ぶ。
-     * 全バニラ LivingEntity（プレイヤー以外）分のアイテムを登録予約する。
+     * Living 系モブ ＆ Player 以外だけを対象に、捕獲アイテムを動的に全部予約する。
+     * （バニラ minecraft 名前空間のみ）
      */
-    public static void bootstrapCaptureItems() {
-        if (!CAPTURED_ITEMS.isEmpty()) return;
+    public static void bootstrapCapturedItems() {
+        if (!CAPTURED_ITEMS.isEmpty()) return; // 二重実行防止
 
-        // 1.21 では keySet() は ResourceLocation の集合
-        for (ResourceLocation entityId : BuiltInRegistries.ENTITY_TYPE.keySet()) {
-            // バニラのみ
-            if (!"minecraft".equals(entityId.getNamespace())) continue;
-
-            EntityType<?> type = BuiltInRegistries.ENTITY_TYPE.get(entityId);
+        for (ResourceLocation id : BuiltInRegistries.ENTITY_TYPE.keySet()) {
+            // まず EntityType を引く
+            EntityType<?> type = BuiltInRegistries.ENTITY_TYPE.get(id);
             if (type == null) continue;
 
-            // プレイヤー除外
+            // バニラだけ対象
+            if (!"minecraft".equals(id.getNamespace())) continue;
+
+            // プレイヤーは対象外
             if (type == EntityType.PLAYER) continue;
 
-            String itemId = "captured_" + entityId.getNamespace() + "_" + entityId.getPath();
+            // Living 的なものだけにしたいので、ざっくり MobCategory.MISC を除外
+            MobCategory cat = type.getCategory();
+            if (cat == MobCategory.MISC) continue;
+
+            // ここまで通ったものだけ捕獲アイテム生成
+            String itemId = "captured_" + id.getNamespace() + "_" + id.getPath();
 
             RegistryObject<Item> reg = ITEMS.register(
                     itemId,
-                    () -> new CapturedMobItem(new Item.Properties(), entityId)
+                    () -> new CapturedMobItem(
+                            new Item.Properties(),
+                            id          // CapturedMobItem には「どの EntityType か」の ID を渡す
+                    )
             );
 
             CAPTURED_ITEMS.put(type, reg);
         }
-    }
-
-    public static void register(IEventBus modEventBus) {
-        ITEMS.register(modEventBus);
     }
 }
