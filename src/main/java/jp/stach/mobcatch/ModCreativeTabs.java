@@ -21,7 +21,6 @@ public final class ModCreativeTabs {
                     .withTabsBefore(CreativeModeTabs.SPAWN_EGGS)
                     .title(Component.translatable("itemGroup.mobcatch"))
                     .icon(() -> {
-                        // 捕獲アイテムが 1 つでもあればそれを、なければ棒アイコン
                         if (!ModItems.CAPTURED_ITEMS.isEmpty()) {
                             return ModItems.CAPTURED_ITEMS.values()
                                     .iterator()

@@ -16,23 +16,15 @@ import java.util.Map;
 public final class ModItems {
     private ModItems() {}
 
-    // この DeferredRegister 自体は「mobcatch」名前空間
     public static final DeferredRegister<Item> ITEMS =
             DeferredRegister.create(ForgeRegistries.ITEMS, MobCatch.MOD_ID);
 
-    /**
-     * EntityType -> そのモブ用の捕獲アイテム
-     */
     public static final Map<EntityType<?>, RegistryObject<Item>> CAPTURED_ITEMS = new LinkedHashMap<>();
 
     public static void register(IEventBus bus) {
         ITEMS.register(bus);
     }
 
-    /**
-     * Living 系モブ ＆ Player 以外だけを対象に、捕獲アイテムを動的に全部予約する。
-     * （バニラ minecraft 名前空間のみ）
-     */
     public static void bootstrapCapturedItems() {
         if (!CAPTURED_ITEMS.isEmpty()) return; // 二重実行防止
 
@@ -45,13 +37,10 @@ public final class ModItems {
             EntityType<?> type = BuiltInRegistries.ENTITY_TYPE.get(id);
             if (type == null) continue;
 
-            // バニラだけ対象
             if (!"minecraft".equals(id.getNamespace())) continue;
 
-            // プレイヤーは対象外
             if (type == EntityType.PLAYER) continue;
 
-            // Living 的なものだけにしたいので、ざっくり MobCategory.MISC を除外
             MobCategory cat = type.getCategory();
             if (cat == MobCategory.MISC) continue;
 
