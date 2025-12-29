@@ -1,0 +1,17 @@
+[29Dec2025 21:05:08.005] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forge_userdev_data, --assetIndex, 17, --assetsDir, /home/seiya/.gradle/caches/forge_gradle/assets, --gameDir, ., --mod, mobcatch, --all, --output, /home/seiya/mods/mobcatch/src/generated/resources, --existing, /home/seiya/mods/mobcatch/src/main/resources]
+[29Dec2025 21:05:08.007] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: JVM identified as Ubuntu OpenJDK 64-Bit Server VM 21.0.9+10-Ubuntu-122.04
+[29Dec2025 21:05:08.007] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher 10.2.4 starting: java version 21.0.9 by Ubuntu; OS Linux arch amd64 version 5.15.153.1-microsoft-standard-WSL2
+[29Dec2025 21:05:08.080] [main/INFO] [net.minecraftforge.fml.loading.ImmediateWindowHandler/]: ImmediateWindowProvider not loading because launch target is forge_userdev_data
+[29Dec2025 21:05:08.172] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.7 Source=jar:file:///home/seiya/.gradle/caches/modules-2/files-2.1/org.spongepowered/mixin/0.8.7/8ab114ac385e6dbdad5efafe28aba4df8120915f/mixin-0.8.7.jar!/ Service=ModLauncher Env=UNKNOWN
+[29Dec2025 21:05:08.817] [main/INFO] [net.minecraftforge.fml.loading.moddiscovery.JarInJarDependencyLocator/]: No dependencies to load found. Skipping!
+[29Dec2025 21:05:09.389] [main/INFO] [cpw.mods.modlauncher.LaunchServiceHandler/MODLAUNCHER]: Launching target 'forge_userdev_data' with arguments [--gameDir, ., --assetsDir, /home/seiya/.gradle/caches/forge_gradle/assets, --assetIndex, 17, --mod, mobcatch, --all, --output, /home/seiya/mods/mobcatch/src/generated/resources, --existing, /home/seiya/mods/mobcatch/src/main/resources]
+[29Dec2025 21:05:12.964] [modloading-worker-0/INFO] [net.minecraftforge.common.ForgeMod/FORGEMOD]: Forge mod loading, version 52.1.0, for MC 1.21.1 with MCP 20240808.132146
+[29Dec2025 21:05:12.965] [modloading-worker-0/INFO] [net.minecraftforge.common.MinecraftForge/FORGE]: MinecraftForge v52.1.0 Initialized
+[29Dec2025 21:05:13.003] [modloading-worker-0/INFO] [net.minecraftforge.common.ForgeMod/FORGEMOD]: Opening jdk.naming.dns/com.sun.jndi.dns to java.naming
+[29Dec2025 21:05:13.222] [main/INFO] [net.minecraftforge.data.loading.DatagenModLoader/]: Initializing Data Gatherer for mods [mobcatch]
+[29Dec2025 21:05:13.268] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/home/seiya/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.21.1-52.1.0_mapped_official_1.21.1/forge-1.21.1-52.1.0_mapped_official_1.21.1-recomp.jar%230!/assets/.mcassetsroot' uses unexpected schema
+[29Dec2025 21:05:13.269] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/home/seiya/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.21.1-52.1.0_mapped_official_1.21.1/forge-1.21.1-52.1.0_mapped_official_1.21.1-recomp.jar%230!/data/.mcassetsroot' uses unexpected schema
+[29Dec2025 21:05:13.343] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Item Models: mobcatch
+[29Dec2025 21:05:13.356] [main/INFO] [net.minecraft.data.DataGenerator/]: Item Models: mobcatch finished after 12 ms
+[29Dec2025 21:05:13.357] [main/INFO] [net.minecraft.data.DataGenerator/]: All providers took: 13 ms
+[29Dec2025 21:05:13.359] [main/INFO] [net.minecraft.data.HashCache/]: Caching: total files: 81, old count: 81, new count: 82, removed stale: 0, written: 0
