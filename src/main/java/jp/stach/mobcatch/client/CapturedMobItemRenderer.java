@@ -1,6 +1,7 @@
 package jp.stach.mobcatch.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import jp.stach.mobcatch.CapturedMobItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -14,6 +15,8 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
+
+import java.util.Optional;
 
 public class CapturedMobItemRenderer extends BlockEntityWithoutLevelRenderer {
 
@@ -33,33 +36,20 @@ public class CapturedMobItemRenderer extends BlockEntityWithoutLevelRenderer {
                              MultiBufferSource buffer,
                              int packedLight,
                              int packedOverlay) {
-        
+
         if ((dbg++ % 60) == 0) {
             System.out.println("[MobCatch] renderByItem ctx=" + ctx + " item=" + stack.getItem());
         }
-
 
         Minecraft mc = Minecraft.getInstance();
         Level level = mc.level;
         if (level == null) return;
 
-        // ★ 今は牛固定（将来ここをEntityId参照にする）
-        Entity entity = EntityType.COW.create(level);
-        if (!(entity instanceof LivingEntity living)) return;
+        LivingEntity living = createLivingForRender(stack, level);
+        if (living == null) return;
 
-        // 捕獲データがあるなら反映
-        CustomData data = stack.get(DataComponents.CUSTOM_DATA);
-        if (data != null) {
-            CompoundTag root = data.copyTag();
-            if (root.contains("EntityTag", CompoundTag.TAG_COMPOUND)) {
-                CompoundTag entityTag = root.getCompound("EntityTag").copy();
-                entityTag.remove("UUID");
-                entityTag.remove("Pos");
-                entityTag.remove("Rotation");
-                entityTag.remove("Motion");
-                living.load(entityTag);
-            }
-        }
+        // 捕獲データがあるなら反映（共通仕様）
+        applyCapturedDataIfPresent(stack, living);
 
         pose.pushPose();
 
@@ -75,10 +65,49 @@ public class CapturedMobItemRenderer extends BlockEntityWithoutLevelRenderer {
         living.yHeadRot = 0.0F;
         living.yHeadRotO = 0.0F;
 
-
         EntityRenderDispatcher dispatcher = mc.getEntityRenderDispatcher();
         dispatcher.render(living, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, pose, buffer, packedLight);
 
         pose.popPose();
     }
+
+    /**
+     * 共通仕様：
+     * - CapturedMobItem なら item が持つ EntityType を使う
+     * - 取れない/違うアイテムなら牛にフォールバック（今の挙動維持）
+     */
+    private LivingEntity createLivingForRender(ItemStack stack, Level level) {
+        EntityType<?> type = EntityType.COW; // フォールバック（今は牛だけ表示したい）
+
+        if (stack.getItem() instanceof CapturedMobItem captured) {
+            Optional<EntityType<?>> opt = captured.getEntityType();
+            if (opt.isPresent()) {
+                type = opt.get();
+            }
+        }
+
+        Entity entity = type.create(level);
+        if (!(entity instanceof LivingEntity living)) return null;
+        return living;
+    }
+
+    /**
+     * 共通仕様：ItemStack の CUSTOM_DATA に EntityTag があればロードする
+     */
+    private void applyCapturedDataIfPresent(ItemStack stack, LivingEntity living) {
+        CustomData data = stack.get(DataComponents.CUSTOM_DATA);
+        if (data == null) return;
+
+        CompoundTag root = data.copyTag();
+        if (!root.contains(CapturedMobItem.TAG_ENTITY_TAG, CompoundTag.TAG_COMPOUND)) return;
+
+        CompoundTag entityTag = root.getCompound(CapturedMobItem.TAG_ENTITY_TAG).copy();
+        entityTag.remove("UUID");
+        entityTag.remove("Pos");
+        entityTag.remove("Rotation");
+        entityTag.remove("Motion");
+
+        living.load(entityTag);
+    }
 }
+
