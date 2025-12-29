@@ -1,6 +1,5 @@
 package jp.stach.mobcatch.datagen;
 
-import jp.stach.mobcatch.MobCatch;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -12,25 +11,35 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 
 public class CapturedItemModelProvider extends ItemModelProvider {
 
-    public CapturedItemModelProvider(PackOutput out, ExistingFileHelper existing) {
-        super(out, MobCatch.MOD_ID, existing);
+    public CapturedItemModelProvider(PackOutput output, ExistingFileHelper existingFileHelper) {
+        super(output, "mobcatch", existingFileHelper);
     }
 
     @Override
     protected void registerModels() {
-        // 親モデル（存在チェックを回避するため Unchecked を使う）
+
         getBuilder("captured_base")
                 .parent(new ModelFile.UncheckedModelFile("minecraft:builtin/entity"));
 
         for (ResourceLocation id : BuiltInRegistries.ENTITY_TYPE.keySet()) {
             EntityType<?> type = BuiltInRegistries.ENTITY_TYPE.get(id);
-            if (type == null) continue;
+            if (type == null) {
+                continue;
+            }
 
-            if (type == EntityType.PLAYER) continue;
-            if (type.getCategory() == MobCategory.MISC) continue;
-
-            // まずはバニラだけにしたいならこれON
+            // バニラだけなら解除
             // if (!"minecraft".equals(id.getNamespace())) continue;
+            if (type == EntityType.PLAYER) {
+                continue;
+            }
+
+            boolean isVillagerLike
+                    = type == EntityType.VILLAGER
+                    || type == EntityType.WANDERING_TRADER;
+
+            if (!isVillagerLike && type.getCategory() == MobCategory.MISC) {
+                continue;
+            }
 
             String itemId = "captured_" + id.getNamespace() + "_" + id.getPath();
             withExistingParent(itemId, modLoc("item/captured_base"));

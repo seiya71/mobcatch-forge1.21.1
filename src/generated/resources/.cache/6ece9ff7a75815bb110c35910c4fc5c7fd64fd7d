@@ -1,4 +1,4 @@
-// 1.21.1	2025-12-29T18:07:46.066517096	Item Models: mobcatch
+// 1.21.1	2025-12-29T20:29:48.911467594	Item Models: mobcatch
 e0f7b66a84e6588f01abbbce75b1803ffe5d46e2 assets/mobcatch/models/item/captured_base.json
 acb820591f5c5a5892b7d3bd01f7cd3e9462f11e assets/mobcatch/models/item/captured_minecraft_allay.json
 acb820591f5c5a5892b7d3bd01f7cd3e9462f11e assets/mobcatch/models/item/captured_minecraft_armadillo.json
@@ -67,6 +67,7 @@ acb820591f5c5a5892b7d3bd01f7cd3e9462f11e assets/mobcatch/models/item/captured_mi
 acb820591f5c5a5892b7d3bd01f7cd3e9462f11e assets/mobcatch/models/item/captured_minecraft_tropical_fish.json
 acb820591f5c5a5892b7d3bd01f7cd3e9462f11e assets/mobcatch/models/item/captured_minecraft_turtle.json
 acb820591f5c5a5892b7d3bd01f7cd3e9462f11e assets/mobcatch/models/item/captured_minecraft_vex.json
+acb820591f5c5a5892b7d3bd01f7cd3e9462f11e assets/mobcatch/models/item/captured_minecraft_villager.json
 acb820591f5c5a5892b7d3bd01f7cd3e9462f11e assets/mobcatch/models/item/captured_minecraft_vindicator.json
 acb820591f5c5a5892b7d3bd01f7cd3e9462f11e assets/mobcatch/models/item/captured_minecraft_wandering_trader.json
 acb820591f5c5a5892b7d3bd01f7cd3e9462f11e assets/mobcatch/models/item/captured_minecraft_warden.json

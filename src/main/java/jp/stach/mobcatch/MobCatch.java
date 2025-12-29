@@ -11,9 +11,9 @@ public class MobCatch {
     public MobCatch() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        ModItems.register(modEventBus);
-
         ModItems.bootstrapCapturedItems();
+
+        ModItems.register(modEventBus);
 
         ModCreativeTabs.register(modEventBus);
     }
